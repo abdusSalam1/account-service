@@ -19,7 +19,9 @@ public class AccountHandler {
         return accountTransformer.toModel(savedAccount);
     }
 
-    public AccountModel updateAccount(String accountId, AccountModel model) {
-        return null;
+    public AccountModel updateAccount(Long accountId, AccountModel model) {
+        Account account = accountTransformer.toEntity(model);
+        Account updatedAccount = accountService.update(accountId, account);
+        return accountTransformer.toModel(updatedAccount);
     }
 }

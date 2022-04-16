@@ -18,7 +18,7 @@ public class AccountController {
     }
 
     @PutMapping("/{accountId}")
-    public AccountModel updateAccount(@PathVariable String accountId, @RequestBody AccountModel model){
+    public AccountModel updateAccount(@PathVariable Long accountId, @RequestBody AccountModel model){
         return accountHandler.updateAccount(accountId, model);
     }
 }
