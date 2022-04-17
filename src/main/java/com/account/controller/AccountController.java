@@ -1,5 +1,6 @@
 package com.account.controller;
 
+import com.account.exception.AccountNotFoundException;
 import com.account.handler.AccountHandler;
 import com.account.model.AccountModel;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class AccountController {
     }
 
     @PutMapping("/{accountId}")
-    public AccountModel updateAccount(@PathVariable Long accountId, @RequestBody AccountModel model){
+    public AccountModel updateAccount(@PathVariable Long accountId, @RequestBody AccountModel model) throws AccountNotFoundException {
         return accountHandler.updateAccount(accountId, model);
     }
 }

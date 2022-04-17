@@ -39,4 +39,18 @@ class AccountMergeExpertTest {
         Assertions.assertEquals(12L, mergedAccount.getId());
     }
 
+    @Test
+    public void whenNewAndOldAreNotSameShouldReturnMerged(){
+        //given
+        Account oldAccount =  Account.builder().id(12L).name("test1").email("test1@gmail.com").build();
+        Account newAccount = Account.builder().id(12L).name("test2").email("test2@gmail.com").build();;
+        //when
+        Account mergedAccount = accountMergeExpert.merge(oldAccount,newAccount);
+        //then
+        Assertions.assertNotNull(mergedAccount);
+        Assertions.assertEquals(12L, mergedAccount.getId());
+        Assertions.assertEquals("test2", mergedAccount.getName());
+        Assertions.assertEquals("test2@gmail.com", mergedAccount.getEmail());
+    }
+
 }
