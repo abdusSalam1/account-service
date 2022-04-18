@@ -1,15 +1,13 @@
 package com.account.handler;
 
 import com.account.domain.Account;
-import com.account.domain.notification.EmailNotificationEvent;
-import com.account.domain.notification.NotificationEvent;
-import com.account.domain.notification.NotificationType;
+import com.account.domain.NotificationType;
 import com.account.exception.AccountNotFoundException;
 import com.account.model.AccountModel;
 import com.account.service.AccountService;
+import com.account.service.NotificationService;
 import com.account.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,13 +15,12 @@ import org.springframework.stereotype.Component;
 public class AccountHandler {
     private final AccountService accountService;
     private final Transformer<AccountModel, Account> accountTransformer;
-    private final KafkaTemplate<String, NotificationEvent> kafkaTemplate;
+    private final NotificationService notificationService;
 
     public AccountModel createAccount(AccountModel model) {
         Account account = accountTransformer.toEntity(model);
         Account savedAccount = accountService.save(account);
-        NotificationEvent emailEvent = createEmailEvent(savedAccount.getEmail(), NotificationType.CREATE_ACCOUNT);
-        kafkaTemplate.send(NotificationType.CREATE_ACCOUNT.toString(), emailEvent);
+        notificationService.sendEmail(NotificationType.CREATE_ACCOUNT, savedAccount.getEmail());
         return accountTransformer.toModel(savedAccount);
     }
 
@@ -31,12 +28,5 @@ public class AccountHandler {
         Account account = accountTransformer.toEntity(model);
         Account updatedAccount = accountService.update(accountId, account);
         return accountTransformer.toModel(updatedAccount);
-    }
-
-    private NotificationEvent createEmailEvent(String email, NotificationType type) {
-        return EmailNotificationEvent.builder()
-                .toEmail(email)
-                .type(type)
-                .build();
     }
 }
