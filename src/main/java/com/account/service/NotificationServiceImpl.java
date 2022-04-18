@@ -15,18 +15,16 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendEmail(NotificationType type, String email) {
         JSONObject obj = new JSONObject();
-        obj.put("type", "EMAIL");
         obj.put("purpose", type.toString());
         obj.put("email", email);
-        kafkaTemplate.send(type.toString(), obj.toJSONString());
+        kafkaTemplate.send("EMAIL", obj.toString());
     }
 
     @Override
     public void sendSMS(NotificationType type, String phoneName) {
         JSONObject obj = new JSONObject();
-        obj.put("type", "SMS");
         obj.put("purpose", type.toString());
         obj.put("phoneNumber", phoneName);
-        kafkaTemplate.send(type.toString(), obj.toJSONString());
+        kafkaTemplate.send("SMS", obj.toString());
     }
 }
