@@ -30,8 +30,6 @@ public class AccountHandler {
     public AccountModel updateAccount(Long accountId, AccountModel model) throws AccountNotFoundException {
         Account account = accountTransformer.toEntity(model);
         Account updatedAccount = accountService.update(accountId, account);
-        NotificationEvent emailEvent = createEmailEvent(updatedAccount.getEmail(), NotificationType.UPDATE_ACCOUNT);
-        kafkaTemplate.send(NotificationType.UPDATE_ACCOUNT.toString(), emailEvent);
         return accountTransformer.toModel(updatedAccount);
     }
 
