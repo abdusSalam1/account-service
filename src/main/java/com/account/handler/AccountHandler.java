@@ -20,6 +20,7 @@ public class AccountHandler {
     public AccountModel createAccount(AccountModel model) {
         Account account = accountTransformer.toEntity(model);
         Account savedAccount = accountService.save(account);
+        //TODO: notification service can be moved to a lib as it is being used by 2 services
         notificationService.sendEmail(NotificationType.CREATE_ACCOUNT, savedAccount.getEmail());
         return accountTransformer.toModel(savedAccount);
     }
