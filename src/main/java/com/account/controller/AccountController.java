@@ -1,6 +1,7 @@
 package com.account.controller;
 
 import com.account.exception.AccountNotFoundException;
+import com.account.exception.DuplicateAccountException;
 import com.account.handler.AccountHandler;
 import com.account.model.AccountModel;
 import com.account.model.AccountResponseModel;
@@ -15,7 +16,7 @@ public class AccountController {
     private final AccountHandler accountHandler;
 
     @PostMapping
-    public AccountResponseModel createAccount(@RequestBody AccountModel model){
+    public AccountResponseModel createAccount(@RequestBody AccountModel model) throws DuplicateAccountException {
         return accountHandler.createAccount(model);
     }
 

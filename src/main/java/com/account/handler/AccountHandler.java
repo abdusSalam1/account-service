@@ -3,6 +3,7 @@ package com.account.handler;
 import com.account.domain.Account;
 import com.account.domain.NotificationType;
 import com.account.exception.AccountNotFoundException;
+import com.account.exception.DuplicateAccountException;
 import com.account.model.AccountModel;
 import com.account.model.AccountResponseModel;
 import com.account.model.JWTResponse;
@@ -21,7 +22,7 @@ public class AccountHandler {
     private final NotificationService notificationService;
     private final JWTService jwtService;
 
-    public AccountResponseModel createAccount(AccountModel model) {
+    public AccountResponseModel createAccount(AccountModel model) throws DuplicateAccountException {
         Account account = accountTransformer.toEntity(model);
         Account savedAccount = accountService.save(account);
         //TODO: notification service can be moved to a lib as it is being used by 2 services

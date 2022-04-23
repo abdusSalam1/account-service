@@ -1,6 +1,7 @@
 package com.account.config.advice;
 
 import com.account.exception.AccountNotFoundException;
+import com.account.exception.DuplicateAccountException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -26,7 +27,17 @@ public class ApiControllerAdvice implements ResponseBodyAdvice<Object> {
     private final static Logger logger = LoggerFactory.getLogger(ApiControllerAdvice.class);
 
     @ExceptionHandler({AccountNotFoundException.class})
-    public ResponseEntity<Object> handleBadRequestException(AccountNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleAccountNotFoundException(AccountNotFoundException ex, WebRequest request) {
+        ApiError error = new ApiError(ex.getMessage(), 0);
+        ApiResponseEnvelope envelope = new ApiResponseEnvelope(false);
+        envelope.addError(error);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity(envelope, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({DuplicateAccountException.class})
+    public ResponseEntity<Object> handleDuplicateAccountException(DuplicateAccountException ex, WebRequest request) {
         ApiError error = new ApiError(ex.getMessage(), 0);
         ApiResponseEnvelope envelope = new ApiResponseEnvelope(false);
         envelope.addError(error);

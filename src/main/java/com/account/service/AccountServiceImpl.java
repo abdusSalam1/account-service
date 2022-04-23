@@ -2,6 +2,7 @@ package com.account.service;
 
 import com.account.domain.Account;
 import com.account.exception.AccountNotFoundException;
+import com.account.exception.DuplicateAccountException;
 import com.account.expert.MergeExpert;
 import com.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ public class AccountServiceImpl implements AccountService {
     private final MergeExpert<Account> accountMergeExpert;
 
     @Override
-    public Account save(Account account) {
+    public Account save(Account account) throws DuplicateAccountException {
+        if(accountRepository.findByEmailIgnoreCase(account.getEmail()) != null)
+            throw new DuplicateAccountException();
         return accountRepository.save(account);
     }
 
