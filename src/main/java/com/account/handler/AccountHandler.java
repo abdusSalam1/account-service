@@ -4,7 +4,10 @@ import com.account.domain.Account;
 import com.account.domain.NotificationType;
 import com.account.exception.AccountNotFoundException;
 import com.account.model.AccountModel;
+import com.account.model.AccountResponseModel;
+import com.account.model.JWTResponse;
 import com.account.service.AccountService;
+import com.account.service.JWTService;
 import com.account.service.NotificationService;
 import com.account.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +19,28 @@ public class AccountHandler {
     private final AccountService accountService;
     private final Transformer<AccountModel, Account> accountTransformer;
     private final NotificationService notificationService;
+    private final JWTService jwtService;
 
-    public AccountModel createAccount(AccountModel model) {
+    public AccountResponseModel createAccount(AccountModel model) {
         Account account = accountTransformer.toEntity(model);
         Account savedAccount = accountService.save(account);
         //TODO: notification service can be moved to a lib as it is being used by 2 services
         notificationService.sendEmail(NotificationType.CREATE_ACCOUNT, savedAccount.getEmail());
-        return accountTransformer.toModel(savedAccount);
+        return buildResponse(account);
     }
 
     public AccountModel updateAccount(Long accountId, AccountModel model) throws AccountNotFoundException {
         Account account = accountTransformer.toEntity(model);
         Account updatedAccount = accountService.update(accountId, account);
         return accountTransformer.toModel(updatedAccount);
+    }
+
+    private AccountResponseModel buildResponse(Account account){
+        //TODO: Just for showcase it is in there otherwise it should be in a proper signin api
+        String token = jwtService.generateToken();
+        return AccountResponseModel.builder()
+                .account(accountTransformer.toModel(account))
+                .tokenResponse(JWTResponse.builder().token(token).build())
+                .build();
     }
 }

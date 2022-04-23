@@ -3,6 +3,7 @@ package com.account.controller;
 import com.account.exception.AccountNotFoundException;
 import com.account.handler.AccountHandler;
 import com.account.model.AccountModel;
+import com.account.model.AccountResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class AccountController {
     private final AccountHandler accountHandler;
 
     @PostMapping
-    public AccountModel createAccount(@RequestBody AccountModel model){
+    public AccountResponseModel createAccount(@RequestBody AccountModel model){
         return accountHandler.createAccount(model);
     }
 
