@@ -26,11 +26,13 @@ class AccountTransformerTest {
     }
 
     @Test
-    public void whenAccountModelShouldReturnNull() {
+    public void whenAccountModelShouldReturnEntity() {
         //given
         AccountModel accountModel = AccountModel.builder()
                 .name("test_name")
                 .email("test@email.com")
+                .phoneNumber("1234")
+                .password("1234")
                 .build();
         //when
         Account account = accountTransformer.toEntity(accountModel);
@@ -38,6 +40,8 @@ class AccountTransformerTest {
         Assertions.assertNotNull(account);
         Assertions.assertEquals("test_name", account.getName());
         Assertions.assertEquals("test@email.com", account.getEmail());
+        Assertions.assertEquals("1234", account.getPhoneNumber());
+        Assertions.assertEquals("1234", account.getPassword());
     }
 
     @Test
@@ -57,6 +61,8 @@ class AccountTransformerTest {
                 .id(123L)
                 .name("test_name")
                 .email("test@email.com")
+                .phoneNumber("1234")
+                .password("1234")
                 .build();
         //when
         AccountModel accountModel = accountTransformer.toModel(account);
@@ -65,6 +71,7 @@ class AccountTransformerTest {
         Assertions.assertEquals(123L, accountModel.getId());
         Assertions.assertEquals("test_name", accountModel.getName());
         Assertions.assertEquals("test@email.com", accountModel.getEmail());
+        Assertions.assertEquals("1234", account.getPhoneNumber());
     }
 
 }

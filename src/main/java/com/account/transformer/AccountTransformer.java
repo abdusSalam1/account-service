@@ -16,6 +16,7 @@ public class AccountTransformer implements Transformer<AccountModel, Account> {
                     .id(entity.getId())
                     .email(entity.getEmail())
                     .name(entity.getName())
+                    .phoneNumber(entity.getPhoneNumber())
                     .build();
     }
 
@@ -27,6 +28,8 @@ public class AccountTransformer implements Transformer<AccountModel, Account> {
             return Account.builder()
                     .email(model.getEmail())
                     .name(model.getName())
+                    .phoneNumber(model.getPhoneNumber())
+                    .password(model.getPassword())
                     .build();
     }
 }
