@@ -1,6 +1,7 @@
 package com.account.service;
 
 import com.account.domain.NotificationType;
+import com.account.domain.TopicType;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,7 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
         JSONObject obj = new JSONObject();
         obj.put("purpose", type.toString());
         obj.put("email", email);
-        kafkaTemplate.send("EMAIL", obj.toString());
+        kafkaTemplate.send(TopicType.EMAIL.toString(), obj.toString());
     }
 
     @Override
@@ -25,6 +26,6 @@ public class NotificationServiceImpl implements NotificationService {
         JSONObject obj = new JSONObject();
         obj.put("purpose", type.toString());
         obj.put("phoneNumber", phoneName);
-        kafkaTemplate.send("SMS", obj.toString());
+        kafkaTemplate.send(TopicType.SMS.toString(), obj.toString());
     }
 }
